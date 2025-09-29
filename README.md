@@ -164,9 +164,6 @@ pip install "tokenizers==0.15.2"
 
 # 3) 上と相性のよい transformers（例）
 pip install "transformers==4.36.2"
-
-# 4) 旧レイアウト前提コードと相性のよい diffusers（例）
-pip install "diffusers==0.25.1"
 ```
 
 ### Weights of Foundation Models
