@@ -31,7 +31,8 @@ def initialize_pipeline(
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
 
-        scheduler, tokenizer, text_encoder, vae, unet = load_primary_models(model)
+        scheduler, tokenizer, text_encoder, vae, unet = load_primary_models(
+            model)
 
     # Freeze any necessary models
     freeze_models([vae, text_encoder, unet])
@@ -86,25 +87,30 @@ def prepare_input_latents(
     num_frames: int,
     height: int,
     width: int,
-    latents_path:str,
+    latents_path: str,
     noise_prior: float
 ):
     # initialize with random gaussian noise
     scale = pipe.vae_scale_factor
-    shape = (batch_size, pipe.unet.config.in_channels, num_frames, height // scale, width // scale)
+    shape = (batch_size, pipe.unet.config.in_channels,
+             num_frames, height // scale, width // scale)
     if noise_prior > 0.:
         cached_latents = torch.load(latents_path)
         if 'inversion_noise' not in cached_latents:
-            latents = inverse_video(pipe, cached_latents['latents'].unsqueeze(0), 50).squeeze(0)
+            latents = inverse_video(
+                pipe, cached_latents['latents'].unsqueeze(0), 50).squeeze(0)
         else:
             latents = torch.load(latents_path)['inversion_noise'].unsqueeze(0)
         if latents.shape[0] != batch_size:
             latents = latents.repeat(batch_size, 1, 1, 1, 1)
         if latents.shape != shape:
-            latents = interpolate(rearrange(latents, "b c f h w -> (b f) c h w", b=batch_size), (height // scale, width // scale), mode='bilinear')
-            latents = rearrange(latents, "(b f) c h w -> b c f h w", b=batch_size)
+            latents = interpolate(rearrange(latents, "b c f h w -> (b f) c h w",
+                                  b=batch_size), (height // scale, width // scale), mode='bilinear')
+            latents = rearrange(
+                latents, "(b f) c h w -> b c f h w", b=batch_size)
         noise = torch.randn_like(latents, dtype=torch.half)
-        latents = (noise_prior) ** 0.5 * latents + (1 - noise_prior) ** 0.5 * noise
+        latents = (noise_prior) ** 0.5 * latents + \
+            (1 - noise_prior) ** 0.5 * noise
     else:
         latents = torch.randn(shape, dtype=torch.half)
 
@@ -119,7 +125,8 @@ def encode(pipe: TextToVideoSDPipeline, pixels: Tensor, batch_size: int = 8):
     for idx in trange(
         0, pixels.shape[0], batch_size, desc="Encoding to latents...", unit_scale=batch_size, unit="frame"
     ):
-        pixels_batch = pixels[idx : idx + batch_size].to(pipe.device, dtype=torch.half)
+        pixels_batch = pixels[idx: idx +
+                              batch_size].to(pipe.device, dtype=torch.half)
         latents_batch = pipe.vae.encode(pixels_batch).latent_dist.sample()
         latents_batch = latents_batch.mul(pipe.vae.config.scaling_factor).cpu()
         latents.append(latents_batch)
@@ -147,7 +154,7 @@ def inference(
     lora_rank: int = 64,
     lora_scale: float = 1.0,
     seed: Optional[int] = None,
-    latents_path: str="",
+    latents_path: str = "",
     noise_prior: float = 0.,
     repeat_num: int = 1,
 ):
@@ -157,7 +164,8 @@ def inference(
 
     with torch.autocast(device, dtype=torch.half):
         # prepare models
-        pipe = initialize_pipeline(model, device, xformers, sdp, lora_path, lora_rank, lora_scale)
+        pipe = initialize_pipeline(
+            model, device, xformers, sdp, lora_path, lora_rank, lora_scale)
 
         for i in range(repeat_num):
             if seed is None:
@@ -193,7 +201,8 @@ def inference(
             os.makedirs(args.output_dir, exist_ok=True)
 
             # save to mp4
-            export_to_video(video_frames, f"{out_name}_{random_seed}.mp4", args.fps)
+            export_to_video(
+                video_frames, f"{out_name}_{random_seed}.mp4", args.fps)
 
             # # save to gif
             # file_name = f"{out_name}_{random_seed}.gif"
@@ -242,8 +251,9 @@ if __name__ == "__main__":
     # =========================================
 
     out_name = f"{args.output_dir}/"
-    prompt = re.sub(r'[<>:"/\\|?*\x00-\x1F]', "_", args.prompt) if platform.system() == "Windows" else args.prompt
-    out_name += f"{prompt}".replace(' ','_').replace(',', '').replace('.', '')
+    prompt = re.sub(r'[<>:"/\\|?*\x00-\x1F]', "_",
+                    args.prompt) if platform.system() == "Windows" else args.prompt
+    out_name += f"{prompt}".replace(' ', '_').replace(',', '').replace('.', '')
 
     args.prompt = [prompt] * args.batch_size
     if args.negative_prompt is not None:
@@ -271,12 +281,9 @@ if __name__ == "__main__":
         sdp=args.sdp,
         lora_path=lora_path,
         lora_rank=args.lora_rank,
-        lora_scale = args.lora_scale,
+        lora_scale=args.lora_scale,
         seed=args.seed,
         latents_path=latents_path,
         noise_prior=args.noise_prior,
         repeat_num=args.repeat_num
     )
-
-
-
