@@ -1,3 +1,5 @@
 __pycache__/
 venv/
 inference_results/
+models/model_scope/
+models/zeroscope_v2_576w/

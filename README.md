@@ -166,6 +166,12 @@ pip install "tokenizers==0.15.2"
 pip install "transformers==4.36.2"
 ```
 
+If you can't use CUDA_HOME, uninstall deepspeed and try again.
+
+```bash
+pip uninstall -y deepspeed
+```
+
 ### Weights of Foundation Models
 
 ```shell
