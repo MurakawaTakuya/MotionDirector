@@ -201,8 +201,12 @@ def inference(
             os.makedirs(args.output_dir, exist_ok=True)
 
             # save to mp4
+            video_filename = f"{out_name}_{random_seed}.mp4"
             export_to_video(
-                video_frames, f"{out_name}_{random_seed}.mp4", args.fps)
+                video_frames, video_filename, args.fps)
+
+            # 生成された動画ファイル名を出力
+            print(f"動画が生成されました: {video_filename}")
 
             # # save to gif
             # file_name = f"{out_name}_{random_seed}.gif"

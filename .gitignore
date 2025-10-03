@@ -3,3 +3,5 @@ venv/
 inference_results/
 models/model_scope/
 models/zeroscope_v2_576w/
+outputs/
+outputs_legacy/
