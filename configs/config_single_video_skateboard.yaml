@@ -57,17 +57,17 @@ train_data:
   n_sample_frames: 16
 
   # 'single_video'
-  single_video_path: "./test_data/bicycle/stock-footage-young-hipster-man-in-helmet-riding-fixed-gear-bicycle-in-the-city-during-autumn-morning-side-view.mp4"
+  single_video_path: "./test_data/skateboarding_16/v_StvwTXdXG2U_first16frames.mp4"
 
   # The prompt when using a single video file
-  fallback_prompt: "A person is riding a bicycle."
+  fallback_prompt: "A person is skateboarding."
 
 # Validation data parameters.
 validation_data:
   # A custom prompt that is different from your training dataset.
   prompt:
-    - "A person is riding a bicycle past the Eiffel Tower."
-    - "A panda is riding a bicycle in a garden."
+    - "A person is skateboarding past the Eiffel Tower."
+    - "A panda is skateboarding in a garden."
 
   # Whether or not to sample preview during training (Requires more VRAM).
   sample_preview: True
@@ -98,7 +98,7 @@ learning_rate: 5e-4
 adam_weight_decay: 1e-2
 
 # Maximum number of train steps. Model is saved after training.
-max_train_steps: 1000
+max_train_steps: 500
 
 # Saves a model every nth step.
 checkpointing_steps: 100

@@ -4,11 +4,8 @@ pretrained_model_path: "./models/zeroscope_v2_576w"
 # The folder where your training outputs will be placed.
 output_dir: "./outputs/train"
 
-# You can train multiple datasets at once. They will be joined together for training.
-# Simply remove the line you don't need, or keep them all for mixed training.
-
 dataset_types:
-  - "single_video"
+  - "folder"
 
 # Caches the latents (Frames-Image -> VAE -> Latent) to a HDD or SDD.
 # The latents will be saved under your training folder, and loaded automatically for training.
@@ -54,20 +51,20 @@ train_data:
   frame_step: 1
 
   # The number of frames to sample. The higher this number, the higher the VRAM (acts similar to batch size).
-  n_sample_frames: 16
+  n_sample_frames: 32
 
-  # 'single_video'
-  single_video_path: "./test_data/bicycle/stock-footage-young-hipster-man-in-helmet-riding-fixed-gear-bicycle-in-the-city-during-autumn-morning-side-view.mp4"
+  # 'multiple videos'
+  path: "./test_data/skateboard/"
 
   # The prompt when using a single video file
-  fallback_prompt: "A person is riding a bicycle."
+  fallback_prompt: "A person is skateboarding."
 
 # Validation data parameters.
 validation_data:
   # A custom prompt that is different from your training dataset.
   prompt:
-    - "A person is riding a bicycle past the Eiffel Tower."
-    - "A panda is riding a bicycle in a garden."
+    - "A person is skateboarding past the Eiffel Tower."
+    - "A panda is skateboarding in a garden."
 
   # Whether or not to sample preview during training (Requires more VRAM).
   sample_preview: True
@@ -91,14 +88,17 @@ validation_data:
   # scale of noise prior, i.e. the scale of inversion noises
   noise_prior: 0.5
 
+use_offset_noise: False
+offset_noise_strength: 0.
+
 # Learning rate for AdamW
 learning_rate: 5e-4
 
 # Weight decay. Higher = more regularization. Lower = closer to dataset.
-adam_weight_decay: 1e-2
+adam_weight_decay: 1e-4
 
 # Maximum number of train steps. Model is saved after training.
-max_train_steps: 1000
+max_train_steps: 2500
 
 # Saves a model every nth step.
 checkpointing_steps: 100

@@ -1,5 +1,5 @@
 # Pretrained diffusers model path.
-pretrained_model_path: "/Users/rui/data/models/zeroscope_v2_576w/"
+pretrained_model_path: "./models/zeroscope_v2_576w"
 
 # The folder where your training outputs will be placed.
 output_dir: "./outputs/train"
@@ -54,9 +54,9 @@ train_data:
   n_sample_frames: 16
 
   # 'multiple videos'
-  path: "./test_data/bicycle-1/"
+  path: "./test_data/bicycle/"
 
-  # The prompt when using a a single video file
+  # The prompt when using a single video file
   fallback_prompt: "A person is riding a bicycle."
 
 # Validation data parameters.
@@ -104,7 +104,7 @@ max_train_steps: 3000
 checkpointing_steps: 100
 
 # How many steps to do for validation if sample_preview is enabled.
-validation_steps: 500
+validation_steps: 100
 
 # Whether or not we want to use mixed precision with accelerate
 mixed_precision: "fp16"
