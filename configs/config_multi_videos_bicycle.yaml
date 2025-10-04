@@ -88,6 +88,10 @@ validation_data:
   # scale of noise prior, i.e. the scale of inversion noises
   noise_prior: 0
 
+  # Random seed for validation video generation (optional)
+  # If not specified or null, random seed will be used
+  seed: null
+
 use_offset_noise: False
 offset_noise_strength: 0.
 

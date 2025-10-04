@@ -54,7 +54,7 @@ train_data:
   n_sample_frames: 32
 
   # 'multiple videos'
-  path: "./test_data/skateboard/"
+  path: "./test_data/skateboarding/"
 
   # The prompt when using a single video file
   fallback_prompt: "A person is skateboarding."
@@ -87,6 +87,10 @@ validation_data:
 
   # scale of noise prior, i.e. the scale of inversion noises
   noise_prior: 0.5
+
+  # Random seed for validation video generation (optional)
+  # If not specified or null, random seed will be used
+  seed: 8551187
 
 use_offset_noise: False
 offset_noise_strength: 0.

@@ -1051,6 +1051,11 @@ def main(
 
                                 out_file = f"{output_dir}/samples/{save_filename}.mp4"
 
+                                # Set seed for validation if specified
+                                if hasattr(validation_data, 'seed') and validation_data.seed is not None:
+                                    torch.manual_seed(validation_data.seed)
+                                    logger.info(f"Using validation seed: {validation_data.seed}")
+
                                 with torch.no_grad():
                                     video_frames = pipeline(
                                         prompt,
